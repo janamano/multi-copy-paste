@@ -9,7 +9,7 @@ git clone https://github.com/janamano/multi-copy-paste.git
 npm install
 ```
 
-Open extionsion.ts on vscode and press F5 to run it
+Open extension.ts on vscode and press F5 to run it
 
 ```
 Ctrl+c or cmd+c to copy
