@@ -22,10 +22,16 @@ export function activate(context: vscode.ExtensionContext) {
 	let clipboard:string[] = [];
 	
 	context.subscriptions.push(disposable);
+	
+	// let test = vscode.languages.registerCompletionItemProvider('plaintext',
+	// {
+	// 	provideCompletionItems()
+	// },
+	// "p")
+
 
 	let copyFunction = vscode.commands.registerCommand('extension.copy', () => {
 		var editor = vscode.window.activeTextEditor;
-	
 		if (editor !== undefined) {
 			
 			let startLine = editor.selection.start.line;
@@ -33,8 +39,12 @@ export function activate(context: vscode.ExtensionContext) {
 			let endLine = editor.selection.end.line;
 			let endChar = editor.selection.end.character;
 
-			clipboard.push(editor.document.getText(new vscode.Range(new vscode.Position(startLine, startChar),
-			 new vscode.Position(endLine, endChar))));
+			let copiedElement = editor.document.getText(new vscode.Range(new vscode.Position(startLine, startChar),
+			new vscode.Position(endLine, endChar)));
+			
+			clipboard.push(copiedElement);
+
+			vscode.env.clipboard.writeText(copiedElement);
 		}
 
 		vscode.window.showInformationMessage("Text Copied");	
@@ -45,11 +55,20 @@ export function activate(context: vscode.ExtensionContext) {
 	context.subscriptions.push(copyFunction);
 
 	let pasteFunction = vscode.commands.registerCommand('extension.paste', async () => {
-		let value = await vscode.window.showQuickPick(clipboard);
+		var value = await vscode.window.showQuickPick(clipboard);
+		var editor = vscode.window.activeTextEditor;
 
-		console.log("value selected: " + value);
-
-
+		if (editor !== undefined) {
+			
+			let startLine = editor.selection.active.line;
+			let startChar = editor.selection.active.character;
+			
+			editor.edit(edit => {
+				if (editor !== undefined && value !== undefined) {
+					edit.replace(editor.selection, value);
+				}
+			});
+		}
 	});
 
 	context.subscriptions.push(pasteFunction);

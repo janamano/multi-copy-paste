@@ -37,8 +37,8 @@
 			},
 			{
 				"command": "extension.paste",
-				"key": "ctrl+v",
-				"mac": "cmd+v",
+				"key": "ctrl+Shift+v",
+				"mac": "cmd+Shift+v",
 				"when": "textInputFocus"
 			}
 		]
